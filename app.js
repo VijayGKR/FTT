@@ -15,4 +15,5 @@ app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
 
+app.fetch()
 //hello test branch
