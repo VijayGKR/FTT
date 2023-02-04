@@ -9,13 +9,13 @@ var getWeather = (lat,lon,callback) => {
     {
         if(!error && response.statusCode === 200)
         {
-           // console.log(body.main.temp)
+           console.log(body.main.temp)
            callback(undefined,{
             Temp: body.main.temp
            });
         }
         else {
-            //console.log('unable to fetch weather');
+            console.log('unable to fetch weather');
             callback('unable to fetch weather');
         }
     
