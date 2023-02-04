@@ -26,33 +26,20 @@ app.get("/", function (req, res) {
 app.post("/api/customers/save", function (req, res) {
     console.log('Post a Weather: ' + JSON.stringify(req.body));
     var cityAddress = req.body.cityname;
-    //
-      geocode.getAddress(cityAddress, (errorMessage, results) => {
-          if (errorMessage) {
-              console.log(errorMessage);
-             return res.status(400).send(errorMessage);
-          } else {
-              var add = results.address;
-              
-              //Get Weather 
-              getWeather.getWeather(results.latitude, results.longitude, (errorMessage, weatherResults) => {
-                  if (errorMessage) {
-                      console.log(errorMessage);
-                      return res.status(400).send(errorMessage);
-                  } else {
-                      var TempCel = weatherResults.Temp - 273.15;
-                      var Temperature = TempCel.toFixed(0);
-                      var output = {};
-                      output.temp = Temperature;
-                      output.addname = add.replace(/ *\,[^,]*\ */g, "");
-                        outputs.push(output);
-                        console.log(output);
-                      return res.status(200).send(output);
-                  }
-              });
-
-          }
-      });
+    getWeather.getWeather(34.0522, -118.243683, (errorMessage, weatherResults) => {
+        if (errorMessage) {
+            console.log(errorMessage);
+            return res.status(400).send(errorMessage);
+        } else {
+            var TempCel = weatherResults.Temp - 273.15;
+            var Temperature = TempCel.toFixed(0);
+            var output = {};
+            output.temp = Temperature;
+            outputs.push(output);
+            console.log(output);
+            return res.status(200).send(output);
+        }
+    });
 });
 
 app.use("/", router);
