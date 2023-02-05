@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTP-8">
+    <meta name="Viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title> Fetch and Graph CSV</title>
+
+    <style type="text/css">
+        .Chart {
+            width: 600px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="Chart">
+        <canvas id="highChart"></canvas>
+    </div>
+
+    <div class="Chart">
+        <canvas id="lowChart"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.min.js"></script>
+    <script>
+        
+        highTempChart();
+        async function highTempChart() {
+            const data = await getData();
+            const ctx = document.getElementById('highChart');
+            const myChart = new Chart(ctx, {
+                type: 'line',
+                data:
+                {
+                    labels: data.xs,
+                    datasets:
+                        [{
+                            label: 'Glendale High Temperature in C°',
+                            data: data.ys,
+                            fill: false,
+                            backgroundColor: 'rgba(222, 140, 159,0.3)',
+                            borderColor: 'rgba(232, 12, 63,0.3)',
+                            borderWidth: 1
+                        }],
+                },
+                options: {
+                    scales: {
+                        y: {
+                            ticks: {
+                                callback: function (value, index, ticks) {
+                                    return value + '°';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+        }
+        lowTempChart();
+        async function lowTempChart() {
+            const data_low = await getData();
+            const ctx_low = document.getElementById('lowChart');
+            const myChart = new Chart(ctx_low, {
+                type: 'line',
+                data:
+                {
+                    labels: data_low.xs,
+                    datasets:
+                        [{
+                            label: 'Glendale Low Temperature in C°',
+                            data: data_low.ys2,
+                            fill: false,
+                            backgroundColor: 'rgba(47, 67, 122,0.3)',
+                            borderColor: 'rgba(23, 37, 77,0.3)',
+                            borderWidth: 1
+                        }],
+                },
+                options: {
+                    scales: {
+                        y: {
+                            ticks: {
+                                callback: function (value, index, ticks) {
+                                    return value + '°';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+        }
+        async function getData() {
+            const xs = [];
+            const ys = [];
+            const ys2 = [];
+            const response = await fetch('glendale.csv');
+            const data = await response.text();
+
+            const table = data.split('\n');
+            table.forEach(row => {
+                const columns = row.split(',');
+                const date = columns[0];
+                xs.push(date);
+                const highTemp = columns[1];
+                ys.push(highTemp);
+                const lowTemp = columns[2];
+                ys2.push(lowTemp);
+                console.log(date, highTemp,lowTemp);
+            });
+            console.log("done");
+            return { xs, ys, ys2 };
+        }
+    </script>
+</body>
+
+</html>
