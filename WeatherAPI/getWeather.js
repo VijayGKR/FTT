@@ -1,5 +1,5 @@
 ////weather api call
-const request =require('request');
+const request = require('request');
 
 var getWeather = (lat,lon,callback) => {
     request ({
